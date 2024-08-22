@@ -1,13 +1,12 @@
 package mini.news.stock.domain.custom;
 
 import lombok.AllArgsConstructor;
-import mini.news.stock.domain.User;
+import mini.news.stock.domain.user.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @AllArgsConstructor
 public class CustomUserDetails implements UserDetails {

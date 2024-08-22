@@ -1,9 +1,6 @@
-package mini.news.stock.domain;
+package mini.news.stock.domain.user;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import mini.news.stock.domain.custom.Gender;
 import mini.news.stock.dto.SignupDto;
@@ -16,11 +13,20 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
+
+    @Column(nullable = false, unique = true)
     private String username;
+
+    @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
     private String nickname;
+
     private Gender gender;
+
     private int age;
+
     private String role;
 
     public static User makeUserEntity(SignupDto signupDto, BCryptPasswordEncoder bCryptPasswordEncoder){

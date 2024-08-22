@@ -1,6 +1,6 @@
 package mini.news.stock.repository;
 
-import mini.news.stock.domain.User;
+import mini.news.stock.domain.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

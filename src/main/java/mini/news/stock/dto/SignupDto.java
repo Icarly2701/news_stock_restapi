@@ -23,4 +23,6 @@ public class SignupDto {
     @NotNull
     @Positive(message = "나이는 0보다 높아야 합니다.")
     private int age;
+
+    private String keyword;
 }

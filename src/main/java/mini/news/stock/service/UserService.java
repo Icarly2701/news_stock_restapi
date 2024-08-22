@@ -1,7 +1,7 @@
 package mini.news.stock.service;
 
 import lombok.AllArgsConstructor;
-import mini.news.stock.domain.User;
+import mini.news.stock.domain.user.User;
 import mini.news.stock.dto.SignupDto;
 import mini.news.stock.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

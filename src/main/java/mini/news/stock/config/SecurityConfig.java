@@ -50,8 +50,8 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/login", "/", "/signup", "/home", "/news/*", "/news/temp/*",
-                                "/post").permitAll()
+                        .requestMatchers("/login", "/", "/signup", "/home", "/news/*", "/news/temp/*").permitAll()
+                        .requestMatchers("/post").hasRole("USER")
                         .anyRequest().authenticated());
 
         http
