@@ -22,3 +22,21 @@ spring:
 
   jwt:
     secret: flkselkfdlkdfjeoifiowjdkjnlflnsenlflnekfkjr
+
+api:
+  base:
+    url: https://openapi.naver.com/v1/search/news.json
+  query:
+    sort: date
+    display: 20
+
+naver:
+  client:
+    id: xPUQv5Cn2RH7awxJc1re
+    secret: JQjpJochy7
+
+feign:
+  client:
+    config:
+      default:
+        loggerLevel: FULL
