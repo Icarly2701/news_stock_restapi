@@ -6,7 +6,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mini.news.stock.domain.news.News;
 import mini.news.stock.domain.news.NewsItem;
+import mini.news.stock.domain.news.SearchKeywordNews;
 import mini.news.stock.repository.news.NewsRepository;
+import mini.news.stock.repository.news.SearchKeywordNewsRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -31,15 +33,28 @@ public class AutoRenewalService {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final NewsClient newsClient;
     private final NewsRepository newsRepository;
+    private final SearchKeywordNewsRepository searchKeywordNewsRepository;
 
 
     @Transactional
     @Scheduled(fixedDelay = 720000)
     public void renewalNewsData(){
-
         String [] stockKeyword = {"주식", "증권", "금융", "코스피", "코스닥", "나스닥", "NASDAQ", "다우존스", "금리", "증시", "부동산", "주가"};
         for(String keyword : stockKeyword){
             getNewsDataUseApi(keyword, 1);
+        }
+    }
+
+    @Transactional
+    public void searchKeywordNews(String keyword){
+        Map<String, Object> recentNewsAboutStock = newsClient.getNews(keyword, display, sort);
+        Object itemsObject = recentNewsAboutStock.get("items");
+        if(itemsObject instanceof List<?> itemsList){
+            if(!itemsList.isEmpty() && itemsList.get(0) instanceof Map){
+                List<Map<String, Object>> items = castListOfMaps(itemsList);
+                List<NewsItem> newsItems = objectMapper.convertValue(items, new TypeReference<List<NewsItem>>() {});
+                getSaveSearchKeywordNews(newsItems);
+            }
         }
     }
 
@@ -74,6 +89,19 @@ public class AutoRenewalService {
             if(!newsRepository.existsByNewsUrl(rink)){
                 newsRepository.save(News.makeNewsEntity(newsItem));
             }
+        }
+    }
+
+    private void getSaveSearchKeywordNews(List<NewsItem> newsItems) {
+
+        log.info("확인용: {}", newsItems.get(0).getTitle());
+        for(NewsItem newsItem : newsItems){
+            searchKeywordNewsRepository.save(new SearchKeywordNews(
+                    newsItem.getTitle(),
+                    newsItem.getOriginallink(),
+                    newsItem.getPubDate(),
+                    newsItem.getDescription())
+            );
         }
     }
 
