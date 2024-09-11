@@ -23,4 +23,12 @@ public class RecentPost {
     private Post post;
 
     private Date recentPostDate;
+
+    public static RecentPost addRecentPost(User user, Post post){
+        RecentPost recentPost = new RecentPost();
+        recentPost.post = post;
+        recentPost.user = user;
+        return recentPost;
+    }
+
 }

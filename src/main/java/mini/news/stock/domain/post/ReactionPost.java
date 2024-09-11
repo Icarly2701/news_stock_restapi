@@ -27,4 +27,20 @@ public class ReactionPost {
     private Reaction reactionPostReaction;
 
     private Date reactionPostDate;
+
+    public static ReactionPost addReactionGoodPost(User user, Post post){
+        ReactionPost reactionPost = new ReactionPost();
+        reactionPost.post = post;
+        reactionPost.user = user;
+        reactionPost.reactionPostReaction = Reaction.GOOD;
+        return reactionPost;
+    }
+
+    public static ReactionPost addReactionBadPost(User user, Post post){
+        ReactionPost reactionPost = new ReactionPost();
+        reactionPost.post = post;
+        reactionPost.user = user;
+        reactionPost.reactionPostReaction = Reaction.BAD;
+        return reactionPost;
+    }
 }

@@ -1,5 +1,6 @@
 package mini.news.stock.controller;
 
+import feign.Response;
 import lombok.RequiredArgsConstructor;
 import mini.news.stock.dto.AddPostDto;
 import mini.news.stock.dto.PostDto;
@@ -8,6 +9,7 @@ import mini.news.stock.dto.UpdatePostDto;
 import mini.news.stock.service.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,8 +20,9 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping("/post/{postId}")
-    public ResponseEntity<PostDto> getPostDetail(@PathVariable Long postId){
-        return new ResponseEntity<>(postService.getPostDetail(postId), HttpStatus.OK);
+    public ResponseEntity<PostDto> getPostDetail(@PathVariable Long postId,
+                                                 Authentication authentication){
+        return new ResponseEntity<>(postService.getPostDetail(postId, authentication), HttpStatus.OK);
     }
 
     @GetMapping("/post")
@@ -47,4 +50,17 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK).body("게시물 수정 완료");
     }
 
+    @PostMapping("/post/{postId}/like")
+    public ResponseEntity<String> addPostLike(@PathVariable Long postId,
+                                              Authentication authentication){
+        postService.addPostLike(postId, authentication);
+        return ResponseEntity.status(HttpStatus.OK).body("게시물 좋아요 완료");
+    }
+
+    @PostMapping("/post/{postId}/dislike")
+    public ResponseEntity<String> addPostDislike(@PathVariable Long postId,
+                                                 Authentication authentication){
+        postService.addPostDislike(postId, authentication);
+        return ResponseEntity.status(HttpStatus.OK).body("게시물 싫어요 완료");
+    }
 }

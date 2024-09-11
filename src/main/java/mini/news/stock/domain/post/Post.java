@@ -44,4 +44,16 @@ public class Post {
         this.postTitle = updatePostDto.getPostTitle();
         this.postContent = updatePostDto.getPostContent();
     }
+
+    public void addPostView(){
+        this.postViewCount++;
+    }
+
+    public void addPostLike(){
+        this.postRecommendCount++;
+    }
+
+    public void addPostDislike(){
+        this.postRecommendCount--;
+    }
 }
