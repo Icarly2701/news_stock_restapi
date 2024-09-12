@@ -48,14 +48,14 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK).body("게시물 수정 완료");
     }
 
-    @PostMapping("/post/{postId}/like")
+    @GetMapping("/post/{postId}/like")
     public ResponseEntity<String> addPostLike(@PathVariable Long postId,
                                               Authentication authentication){
         postService.addPostLike(postId, authentication);
         return ResponseEntity.status(HttpStatus.OK).body("게시물 좋아요 완료");
     }
 
-    @PostMapping("/post/{postId}/dislike")
+    @GetMapping("/post/{postId}/dislike")
     public ResponseEntity<String> addPostDislike(@PathVariable Long postId,
                                                  Authentication authentication){
         postService.addPostDislike(postId, authentication);
