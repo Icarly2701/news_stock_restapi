@@ -2,10 +2,8 @@ package mini.news.stock.controller;
 
 import feign.Response;
 import lombok.RequiredArgsConstructor;
-import mini.news.stock.dto.AddPostDto;
-import mini.news.stock.dto.PostDto;
-import mini.news.stock.dto.PostListDto;
-import mini.news.stock.dto.UpdatePostDto;
+import mini.news.stock.domain.post.TempPost;
+import mini.news.stock.dto.*;
 import mini.news.stock.service.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,5 +60,17 @@ public class PostController {
                                                  Authentication authentication){
         postService.addPostDislike(postId, authentication);
         return ResponseEntity.status(HttpStatus.OK).body("게시물 싫어요 완료");
+    }
+
+    @PostMapping("/post/temp/add")
+    public ResponseEntity<String> addTempPost(@RequestAttribute TempPostDto tempPostDto,
+                                              Authentication authentication){
+        postService.addTempPost(tempPostDto, authentication);
+        return ResponseEntity.status(HttpStatus.OK).body("임시 게시물 저장 완료");
+    }
+
+    @GetMapping("/post/temp")
+    public ResponseEntity<TempPostDto> getTempPost(Authentication authentication){
+        return new ResponseEntity<>(postService.getTempPost(authentication), HttpStatus.OK);
     }
 }

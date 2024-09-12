@@ -2,15 +2,9 @@ package mini.news.stock.service;
 
 import lombok.RequiredArgsConstructor;
 import mini.news.stock.domain.custom.Reaction;
-import mini.news.stock.domain.post.Post;
-import mini.news.stock.domain.post.PostComment;
-import mini.news.stock.domain.post.ReactionPost;
-import mini.news.stock.domain.post.RecentPost;
+import mini.news.stock.domain.post.*;
 import mini.news.stock.domain.user.User;
-import mini.news.stock.dto.AddPostDto;
-import mini.news.stock.dto.PostDto;
-import mini.news.stock.dto.PostListDto;
-import mini.news.stock.dto.UpdatePostDto;
+import mini.news.stock.dto.*;
 import mini.news.stock.repository.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,6 +25,7 @@ public class PostService {
     private final RecentPostRepository recentPostRepository;
     private final ReactionPostRepository reactionPostRepository;
     private final PostCommentRepository postCommentRepository;
+    private final TempPostRepository tempPostRepository;
     private final UserRepository userRepository;
 
     public PostDto getPostDetail(Long postId, Authentication authentication){
@@ -148,5 +143,30 @@ public class PostService {
         if(reactionPost.getReactionPostReaction() == Reaction.BAD){
             reactionPostRepository.delete(reactionPost);
         }
+    }
+
+    public void addTempPost(TempPostDto tempPostDto, Authentication authentication){
+        if(!(authentication instanceof AnonymousAuthenticationToken)) {
+            User user = userRepository.findByUsername(authentication.getName());
+
+            TempPost tempPost = tempPostRepository.findByUserUsername(authentication.getName()).orElse(null);
+            if(tempPost != null){
+                tempPostRepository.delete(tempPost);
+            }
+
+            tempPostRepository.save(TempPost.addTempPost(user,tempPostDto));
+        }
+    }
+
+    public TempPostDto getTempPost(Authentication authentication) {
+        if (authentication instanceof AnonymousAuthenticationToken) return null;
+
+        TempPost tempPost = tempPostRepository.findByUserUsername(authentication.getName()).orElse(null);
+        if (tempPost == null) return null;
+
+        return TempPostDto.builder()
+                .postTitle(tempPost.getTempPostTitle())
+                .postContent(tempPost.getTempPostContent())
+                .build();
     }
 }
